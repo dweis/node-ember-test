@@ -1,6 +1,12 @@
-#container
+script(type="text/x-handlebars")
+  | {{#view Em.Button target="App.boxController" action="createBox"}}
+  |   Add Box
+  | {{/view}}
 
-script(src="//ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js")
+  | {{#collection contentBinding="App.boxController" itemClassBinding="content.color"}}
+  |   {{content.color}}
+  | {{/collection}}
+script(src="http:////ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js")
 script
   !window.jQuery && document.write(unescape('%3Cscript src="javascripts/vendor/jquery-1.6.1.min.js"%3E%3C/script%3E'))
 script(src="javascripts/vendor/ember-0.9.3.min.js")

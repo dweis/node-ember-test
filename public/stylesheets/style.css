@@ -6,3 +6,21 @@ body {
 a {
   color: #00B7FF;
 }
+
+.red { background-color: #933; }
+.green { background-color: #393; }
+.blue { background-color: #339; }
+
+.red, .green, .blue {
+  width: 75px;
+  height: 75px;
+  float: left;
+  margin: 5px;
+  padding: 5px;
+  text-align: center;
+  line-height: 75px;
+  vertical-align: middle;
+  color: #ccc;
+  font-weight: bold;
+  border-radius: 5px;
+}
