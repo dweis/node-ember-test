@@ -12,17 +12,13 @@ script(src="javascripts/vendor/ember-0.9.3.min.js")
         small Here is what's going on in Toronto, Ontario, Canada.
 
     .row
-      .span10
+      .span14
         script(type="text/x-handlebars")
           | {{#each App.tweetsController}}
           |   {{#view App.TweetsView contentBinding="this"}}
           |     {{#with content}}
-          |       <div>
-          |         id: {{content.id}}
-          |         Text: {{content.text}}
-          |         Photo: {{content.photo}}
-          |         User: {{content.username}}
-          |       </div>
+          |       <img {{bindAttr src="photo"}}/>
+          |       <b>{{username}}</b>: {{text}}
           |     {{/with}}
           |   {{/view}}
           | {{/each}}
@@ -32,7 +28,7 @@ script(src="javascripts/vendor/ember-0.9.3.min.js")
 
 script
   (function($) {
-    var App = Em.Application.create();
+    window.App = Em.Application.create();
 
     App.Tweet = Em.Object.extend({
       id: null,
@@ -52,8 +48,10 @@ script
           text: tweet.text
         });
 
-        this.pushObject(tweetObject);
-        console.log(this.get('content').length);
+        this.unshiftObject(tweetObject);
+
+        if (this.content.length > 6)
+          this.popObject();
       }
     });
 
