@@ -1,13 +1,70 @@
-script(type="text/x-handlebars")
-  | {{#view Em.Button target="App.boxController" action="createBox"}}
-  |   Add Box
-  | {{/view}}
-
-  | {{#collection contentBinding="App.boxController" itemClassBinding="content.color"}}
-  |   {{content.color}}
-  | {{/collection}}
+script(src='/socket.io/socket.io.js')
 script(src="http:////ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js")
 script
   !window.jQuery && document.write(unescape('%3Cscript src="javascripts/vendor/jquery-1.6.1.min.js"%3E%3C/script%3E'))
 script(src="javascripts/vendor/ember-0.9.3.min.js")
-script(src="javascripts/app.js")
+
+.container
+  .content
+    .page-header
+      h1
+        | Toronto Tweet Stream
+        small Here is what's going on in Toronto, Ontario, Canada.
+
+    .row
+      .span10
+        script(type="text/x-handlebars")
+          | {{#each App.tweetsController}}
+          |   {{#view App.TweetsView contentBinding="this"}}
+          |     {{#with content}}
+          |       <div>
+          |         id: {{content.id}}
+          |         Text: {{content.text}}
+          |         Photo: {{content.photo}}
+          |         User: {{content.username}}
+          |       </div>
+          |     {{/with}}
+          |   {{/view}}
+          | {{/each}}
+
+    footer
+      | &copy; 2012 Derrick Weis
+
+script
+  (function($) {
+    var App = Em.Application.create();
+
+    App.Tweet = Em.Object.extend({
+      id: null,
+      username: null,
+      photo: null,
+      text: null
+    });
+
+    App.tweetsController = Em.ArrayProxy.create({
+      content: [],
+
+      createTweet: function(tweet) {
+        var tweetObject = App.Tweet.create({
+          id: tweet.id,
+          username: tweet.user.screen_name,
+          photo: tweet.user.profile_image_url,
+          text: tweet.text
+        });
+
+        this.pushObject(tweetObject);
+        console.log(this.get('content').length);
+      }
+    });
+
+    App.TweetsView = Ember.View.extend({
+      templateName: 'app/templates/tweets/list',
+      tweetsBinding: 'App.tweetsController'
+    })
+
+    var socket = io.connect('http://localhost');
+
+    socket.on('tweet', function (tweet) {
+      App.tweetsController.createTweet(tweet);
+    });
+  }) (jQuery);
