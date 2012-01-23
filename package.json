@@ -1,9 +1,14 @@
 {
-    "name": "application-name"
+    "name": "node-ember-test"
   , "version": "0.0.1"
   , "private": true
   , "dependencies": {
       "express": "2.5.5"
     , "jade": ">= 0.0.1"
+    , "ntwitter": "0.2.9-2"
+    , "socket.io": "0.8.7"
+    , "config": "0.4.10"
+    , "bootstrap-stylus": "0.2.0"
+    , "stylus": "0.22.6"
   }
 }
